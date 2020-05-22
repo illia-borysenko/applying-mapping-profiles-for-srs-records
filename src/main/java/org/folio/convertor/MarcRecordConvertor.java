@@ -34,8 +34,8 @@ public class MarcRecordConvertor implements RecordConvertor {
 
     private Record appendAdditionalFields(Record record, List<VariableField> additionalFields) {
         Record sortedRecord = sortedMarcFactory.newRecord();
-        for (VariableField srsField : record.getVariableFields()) {
-            sortedRecord.addVariableField(srsField);
+        for (VariableField recordField : record.getVariableFields()) {
+            sortedRecord.addVariableField(recordField);
         }
         for (VariableField generatedField : additionalFields) {
             sortedRecord.addVariableField(generatedField);

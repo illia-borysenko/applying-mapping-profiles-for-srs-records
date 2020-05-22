@@ -5,6 +5,7 @@ import io.vertx.core.json.JsonObject;
 import org.apache.commons.io.IOUtils;
 import org.folio.mapping.profile.MappingProfile;
 import org.folio.mapping.profile.MappingProfileRule;
+import org.folio.mocks.FileDefinition;
 import org.folio.mocks.OkapiConnectionParams;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,8 @@ public class SrsRecordServiceTest {
     public void shouldAppendHoldingsAndItems() throws IOException {
         JsonArray sourceRecords = new JsonObject(getResourceAsString("srs_records.json")).getJsonArray("sourceRecords");
 
-        List<String> marcRecords = srsRecordService.exportSrsRecord(mappingProfile, sourceRecords, "jobExecutionId", new OkapiConnectionParams());
+        List<String> marcRecords = srsRecordService.exportSrsRecord(mappingProfile, sourceRecords, new FileDefinition(),
+                "jobExecutionId", new OkapiConnectionParams());
 
         List<String> expectedMarcRecords = getExpectedMarcRecords("expected_marc_records_with_transformations.mrc");
         assertEquals(expectedMarcRecords.get(0), marcRecords.get(0));
@@ -52,7 +54,8 @@ public class SrsRecordServiceTest {
         mappingProfile.setRecordTypes(Arrays.asList(INSTANCE));
         JsonArray sourceRecords = new JsonObject(getResourceAsString("srs_records.json")).getJsonArray("sourceRecords");
 
-        List<String> marcRecords = srsRecordService.exportSrsRecord(mappingProfile, sourceRecords, "jobExecutionId", new OkapiConnectionParams());
+        List<String> marcRecords = srsRecordService.exportSrsRecord(mappingProfile, sourceRecords, new FileDefinition(),
+                "jobExecutionId", new OkapiConnectionParams());
 
         List<String> expectedMarcRecords = getExpectedMarcRecords("expected_marc_records.mrc");
         assertEquals(expectedMarcRecords.get(0), marcRecords.get(0));

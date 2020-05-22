@@ -9,6 +9,9 @@ import org.folio.mapping.MappingService;
 import org.folio.mapping.MappingServiceImpl;
 import org.folio.mapping.profile.MappingProfile;
 import org.folio.mapping.profile.RecordType;
+import org.folio.mocks.FileDefinition;
+import org.folio.mocks.FileStorage;
+import org.folio.mocks.LocalFileSystemStorage;
 import org.folio.mocks.OkapiConnectionParams;
 import org.marc4j.marc.VariableField;
 
@@ -23,18 +26,24 @@ public class SrsRecordService {
 
     private MappingService mappingService = new MappingServiceImpl();
     private RecordConvertor recordConvertor = new MarcRecordConvertor();
+    private FileStorage fileStorage = new LocalFileSystemStorage();
 
     private List<JsonObject> holdings;
     private List<JsonObject> items;
 
-    public List<String> exportSrsRecord(MappingProfile mappingProfile, JsonArray srsRecords, String jobExecutionId, OkapiConnectionParams connectionParams) {
+    public List<String> exportSrsRecord(MappingProfile mappingProfile, JsonArray srsRecords, FileDefinition fileDefinition, String jobExecutionId, OkapiConnectionParams connectionParams) {
         List<RecordType> mappingProfileRecordTypes = mappingProfile.getRecordTypes();
         List<String> marcRecords = new ArrayList<>();
         for (Object o : srsRecords) {
             JsonObject srsRecord = (JsonObject) o;
+            //generate record fields by mapping profile
             List<VariableField> mappedFields = getMappedFields(mappingProfile, jobExecutionId, connectionParams, mappingProfileRecordTypes, srsRecord);
             String encodedRecordContent = getEncodedRecordContent(srsRecord);
-            String marcRecord = new String(recordConvertor.convert(encodedRecordContent, mappedFields));
+            //convert srs record to marc and append generated fields
+            byte[] marcRecordContent = recordConvertor.convert(encodedRecordContent, mappedFields);
+            //save marc record content to file
+            fileStorage.saveFileDataBlocking(marcRecordContent, fileDefinition);
+            String marcRecord = new String(marcRecordContent);
             marcRecords.add(marcRecord);
         }
         return marcRecords;
