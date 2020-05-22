@@ -1,0 +1,206 @@
+[
+  {
+    "field": "leader",
+    "description": "Leader",
+    "dataSources": [
+      {
+        "translation": {
+          "function": "set_17-19_positions",
+          "parameters": {
+            "position17": "3",
+            "position18": "c",
+            "position19": " "
+          }
+        }
+      }
+    ]
+  },
+  {
+    "field": "001",
+    "description": "The human readable ID",
+    "dataSources": [
+      {
+        "from": "$.hrid"
+      }
+    ]
+  },
+  {
+    "field": "245",
+    "description": "Title",
+    "dataSources": [
+      {
+        "from": "$.title",
+        "subfield": "a"
+      },
+      {
+        "indicator": "1",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": "0"
+          }
+        }
+      },
+      {
+        "indicator": "2",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": "0"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "field": "264",
+    "description": "Publication",
+    "dataSources": [
+      {
+        "from": "$.publication[*].place",
+        "subfield": "a"
+      },
+      {
+        "from": "$.publication[*].publisher",
+        "subfield": "b"
+      },
+      {
+        "from": "$.publication[*].dateOfPublication",
+        "subfield": "c"
+      },
+      {
+        "indicator": "1",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": " "
+          }
+        }
+      },
+      {
+        "indicator": "2",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": "1"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "field": "300",
+    "description": "Physical Descriptions",
+    "dataSources": [
+      {
+        "from": "$.physicalDescriptions",
+        "subfield": "a"
+      },
+      {
+        "indicator": "1",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": " "
+          }
+        }
+      },
+      {
+        "indicator": "2",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": " "
+          }
+        }
+      }
+    ]
+  },
+  {
+    "field": "490",
+    "description": "Series",
+    "dataSources": [
+      {
+        "from": "$.series",
+        "subfield": "a"
+      },
+      {
+        "indicator": "1",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": "0"
+          }
+        }
+      },
+      {
+        "indicator": "2",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": " "
+          }
+        }
+      }
+    ]
+  },
+  {
+    "field": "655",
+    "description": "Nature of content terms",
+    "dataSources": [
+      {
+        "from": "$.natureOfContentTermIds",
+        "subfield": "a",
+        "translation": {
+          "function": "set_nature_of_content_term"
+        }
+      },
+      {
+        "indicator": "1",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": " "
+          }
+        }
+      },
+      {
+        "indicator": "2",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": "4"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "field": "999",
+    "description": "Unique ID of the instance record",
+    "dataSources": [
+      {
+        "from": "$.id",
+        "subfield": "i"
+      },
+      {
+        "indicator": "1",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": "f"
+          }
+        }
+      },
+      {
+        "indicator": "2",
+        "translation": {
+          "function": "set_value",
+          "parameters": {
+            "value": "f"
+          }
+        }
+      }
+    ]
+  }
+]

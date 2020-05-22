@@ -1,0 +1,49 @@
+{
+  "sourceRecords": [
+    {
+      "recordId": "67dfac11-1caf-4470-9ad1-d533f6360bdd",
+      "parsedRecord": {
+        "content": {
+          "leader": "01542ccm a2200361   4500",
+          "fields": [
+            {
+              "001": "393893"
+            },
+            {
+              "005": "20141107001016.0"
+            },
+            {
+              "008": "830419m19559999gw mua   hiz   n    lat  "
+            }
+          ]
+        }
+      },
+      "externalIdsHolder": {
+        "instanceId": "d3a4f598-ef82-49e1-8a4c-e65a434a39a1"
+      }
+    },
+    {
+      "recordId": "1c2cca2f-a4ce-4b58-bd92-538ebef80519",
+      "parsedRecord": {
+        "content": {
+          "leader": "01542ccm a2200361   4500",
+          "fields": [
+            {
+              "001": "393893"
+            },
+            {
+              "005": "20141107001016.0"
+            },
+            {
+              "008": "830419m19559999gw mua   hiz   n    lat  "
+            }
+          ]
+        }
+      },
+      "externalIdsHolder": {
+        "instanceId": "5eeb697a-1727-4232-b4d3-65c34d48cdf9"
+      }
+    }
+  ],
+  "totalRecords": 2
+}
