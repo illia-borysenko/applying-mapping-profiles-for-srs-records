@@ -13,8 +13,11 @@ import org.folio.mocks.OkapiConnectionParams;
 import org.marc4j.marc.VariableField;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SrsRecordService {
 
@@ -24,27 +27,33 @@ public class SrsRecordService {
     private List<JsonObject> holdings;
     private List<JsonObject> items;
 
-    public List<String> exportSrsRecord(MappingProfile mappingProfile, JsonArray srsRecords,  String jobExecutionId, OkapiConnectionParams connectionParams) {
+    public List<String> exportSrsRecord(MappingProfile mappingProfile, JsonArray srsRecords, String jobExecutionId, OkapiConnectionParams connectionParams) {
         List<RecordType> mappingProfileRecordTypes = mappingProfile.getRecordTypes();
         List<String> marcRecords = new ArrayList<>();
-        for(Object o : srsRecords) {
+        for (Object o : srsRecords) {
             JsonObject srsRecord = (JsonObject) o;
-            if(CollectionUtils.isNotEmpty(mappingProfileRecordTypes)
-                    && (mappingProfileRecordTypes.contains(RecordType.HOLDINGS) || mappingProfileRecordTypes.contains(RecordType.ITEM))) {
-                JsonObject externalIdsHolder = srsRecord.getJsonObject("externalIdsHolder");
-                if (externalIdsHolder != null) {
-                    String instanceId = externalIdsHolder.getString("instanceId");
-                    JsonObject holdingsAndItem = fetchHoldingsAndItems(instanceId);
-                    List<VariableField> variableFields = mappingService.mapFields(holdingsAndItem, mappingProfile, jobExecutionId, connectionParams);
-                    String marcRecord = new String(recordConvertor.convert(getEncodedRecordContent(srsRecord), variableFields));
-                    marcRecords.add(marcRecord);
-                }
-            } else {
-                String marcRecord = new String(recordConvertor.convert(getEncodedRecordContent(srsRecord)));
-                marcRecords.add(marcRecord);
-            }
+            List<VariableField> mappedFields = getMappedFields(mappingProfile, jobExecutionId, connectionParams, mappingProfileRecordTypes, srsRecord);
+            String encodedRecordContent = getEncodedRecordContent(srsRecord);
+            String marcRecord = new String(recordConvertor.convert(encodedRecordContent, mappedFields));
+            marcRecords.add(marcRecord);
         }
         return marcRecords;
+    }
+
+    private List<VariableField> getMappedFields(MappingProfile mappingProfile, String jobExecutionId, OkapiConnectionParams connectionParams, List<RecordType> mappingProfileRecordTypes, JsonObject srsRecord) {
+        List<VariableField> mappedFields = Collections.emptyList();
+        if (CollectionUtils.isNotEmpty(mappingProfileRecordTypes)
+                && (mappingProfileRecordTypes.contains(RecordType.HOLDINGS) || mappingProfileRecordTypes.contains(RecordType.ITEM))) {
+            JsonObject externalIdsHolder = srsRecord.getJsonObject("externalIdsHolder");
+            if (externalIdsHolder != null) {
+                String instanceId = externalIdsHolder.getString("instanceId");
+                if (isNotBlank(instanceId)) {
+                    JsonObject holdingsAndItem = fetchHoldingsAndItems(instanceId);
+                    mappedFields = mappingService.mapFields(holdingsAndItem, mappingProfile, jobExecutionId, connectionParams);
+                }
+            }
+        }
+        return mappedFields;
     }
 
     private JsonObject fetchHoldingsAndItems(String instanceId) {
